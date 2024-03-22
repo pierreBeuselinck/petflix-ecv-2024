@@ -1,58 +1,48 @@
-CREATE TABLE `animal` (
-  `id_animal` integer PRIMARY KEY,
-  `type` varchar(255),
-  `nom` varchar(255),
-  `age` integer,
-  `date_arrive` datetime,
-  `date_adoption` datetime,
-  `id_video` integer,
-  `id_membres` integer
+CREATE TABLE membresAsso (
+  id_membres INTEGER PRIMARY KEY AUTO_INCREMENT,
+  nom VARCHAR(50),
+  prenom VARCHAR(50),
+  ville VARCHAR(50),
+  email VARCHAR(50),
+  telephone VARCHAR(50)
 );
 
-CREATE TABLE `membresAsso` (
-  `id_membres` integer PRIMARY KEY,
-  `nom` varchar(255),
-  `prenom` varchar(255),
-  `ville` varchar(255),
-  `email` email,
-  `telephone` tel
+CREATE TABLE video (
+  id_video INTEGER PRIMARY KEY AUTO_INCREMENT,
+  titre VARCHAR(50),
+  description VARCHAR(255),
+  url VARCHAR(255),
+  date_ajout DATE
 );
 
-CREATE TABLE `video` (
-  `id_video` integer PRIMARY KEY,
-  `titre` varchar(255),
-  `description` varchar(255),
-  `url` varchar(255),
-  `date_ajout` datetime
+CREATE TABLE adoptant (
+  id_adoptant INTEGER PRIMARY KEY AUTO_INCREMENT,
+  nom VARCHAR(50),
+  prenom VARCHAR(50),
+  adresse VARCHAR(50),
+  email VARCHAR(50)
 );
 
-CREATE TABLE `adoptant` (
-  `id_adoptant` integer PRIMARY KEY,
-  `nom` varchar(255),
-  `prenom` varchar(255),
-  `adresse` varchar(255),
-  `email` email
+CREATE TABLE animal (
+  id_animal INTEGER PRIMARY KEY AUTO_INCREMENT,
+  type VARCHAR(50),
+  nom VARCHAR(50),
+  age INTEGER,
+  date_arrive DATE,
+  date_adoption DATE,
+  id_video INTEGER REFERENCES video(id_video),
+  id_membres INTEGER REFERENCES membresAsso(id_membres)
 );
 
-CREATE TABLE `adoption` (
-  `id_adoption` integer PRIMARY KEY,
-  `date_adoption` datetime,
-  `id_animal` integer,
-  `id_adoptant` integer
+CREATE TABLE adoption (
+  id_adoption INTEGER PRIMARY KEY AUTO_INCREMENT,
+  date_adoption DATE,
+  id_animal INTEGER REFERENCES animal(id_animal),
+  id_adoptant INTEGER REFERENCES adoptant(id_adoptant)
 );
 
-CREATE TABLE `controle` (
-  `id_controle` integer PRIMARY KEY,
-  `date_controle` datetime,
-  `id_adoption` integer
+CREATE TABLE controle (
+  id_controle INTEGER PRIMARY KEY AUTO_INCREMENT,
+  date_controle DATE,
+  id_adoption INTEGER REFERENCES adoption(id_adoption)
 );
-
-ALTER TABLE `animal` ADD FOREIGN KEY (`id_video`) REFERENCES `video` (`id_video`);
-
-ALTER TABLE `animal` ADD FOREIGN KEY (`id_membres`) REFERENCES `membresAsso` (`id_membres`);
-
-ALTER TABLE `adoption` ADD FOREIGN KEY (`id_animal`) REFERENCES `animal` (`id_animal`);
-
-ALTER TABLE `adoption` ADD FOREIGN KEY (`id_adoptant`) REFERENCES `adoptant` (`id_adoptant`);
-
-ALTER TABLE `controle` ADD FOREIGN KEY (`id_adoption`) REFERENCES `adoption` (`id_adoption`);
