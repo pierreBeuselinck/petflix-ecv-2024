@@ -1,0 +1,29 @@
+# Dependencies
+/node_modules
+
+# Build
+/dist
+/.parcel-cache
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+/.idea
+.project
+.classpath
+.c9/
+*.sublime-workspace
+.vscode/*
+
+# Environment Variables
+.env
+
+# Tailwind output file
+/assets/css/style.css
