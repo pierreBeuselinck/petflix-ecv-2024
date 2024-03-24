@@ -1,55 +1,86 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La journée pétillante des bichons maltais de 2 mois</title>
-
+    <title>Détails de la vidéo</title>
+    <link rel="icon" type="image/png" href="./assets/images/icon.png">
     <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/app.css">
 </head>
-
 <body>
     <header>
         <a href="index.html">Revenir à l'accueil</a>
     </header>
     <main>
-        <video width="" height="" controls>
-        </video>
-        <div>
-            <h1>La journée pétillante des bichons maltais de 2 mois</h1>
-            <p>Plongez dans un monde de douceur et de jeux avec notre dernière vidéo, où quatre adorables bichons
-                maltais de tout juste 2 mois découvrent le monde avec émerveillement. Suivez ces boules de poils
-                dans leur première aventure dans un jardin ensoleillé, où chaque brin d'herbe, papillon volant et
-                fleur colorée semble captiver leur curiosité sans limite.
-            </p>
-        </div>
-        <div>
-            <span>Adopté</span>
-            <div>
-                <div>
-                    <img src="" alt="">
-                </div>
-                <div>
-                    <p>Raoul</p>
-                    <p>Chien - 2 mois</p>
-                </div>
-            </div>
-            <div>
-                <div>
-                    <img src="" alt="">
-                </div>
-                <div>
-                    <p>Julien Dupont</p>
-                    <p>Paris</p>
-                    <p>Adresse e-mail : julien.dupont@coeurapattes.org</p>
-                    <p>Numéro de téléphone : +33 6 12 34 56 78</p>
-                </div>
-            </div>
+        <video width="640" height="360" controls id="video-player"></video>
+        <div id="video-details">
+            <h1 id="video-title"></h1>
+            <p id="video-description"></p>
+            <span id="animal-status"></span>
+            <div id="animal-details"></div>
+            <div id="member-details"></div>
         </div>
     </main>
     <footer></footer>
-</body>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const videoId = params.get("id");
+            fetchVideoDetails(videoId);
+        });
+    
+        async function fetchVideoDetails(videoId) {
+            try {
+                const response = await fetch(`http://localhost:8000/videos/${videoId}/details`);
+                if (!response.ok) {
+                    throw new Error(`Erreur lors de la récupération des détails de la vidéo : ${response.status}`);
+                }
+                const data = await response.json();
+                displayVideoDetails(data);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des détails de la vidéo :", error);
+            }
+        }
+    
+        function displayVideoDetails(data) {
+            const videoPlayer = document.getElementById("video-player");
+            const videoTitle = document.getElementById("video-title");
+            const videoDescription = document.getElementById("video-description");
+    
+            videoPlayer.src = data.video.url;
+            videoTitle.textContent = data.video.titre;
+            videoDescription.textContent = data.video.description;
+    
+            const animalDetails = document.getElementById("animal-details");
+            animalDetails.innerHTML = "";
+    
+            data.animaux_associés.forEach(animal => {
+                const animalDetailsHtml = `
+                    <h2>Détails de l'animal :</h2>
+                    <p>Type : ${animal.type}</p>
+                    <p>Nom : ${animal.nom}</p>
+                    <p>Age : ${animal.age}</p>
+                    <p>Date d'arrivée : ${animal.date_arrive}</p>
+                    <p>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : "Non adopté"}</p>`;
+                const animalDiv = document.createElement("div");
+                animalDiv.innerHTML = animalDetailsHtml;
+                animalDetails.appendChild(animalDiv);
+    
+                const memberDetailsHtml = `
+                    <h3>Détails du membre de l'association :</h3>
+                    <p>Nom : ${animal.membre_associé.nom}</p>
+                    <p>Prénom : ${animal.membre_associé.prenom}</p>
+                    <p>Ville : ${animal.membre_associé.ville}</p>
+                    <p>Email : ${animal.membre_associé.email}</p>
+                    <p>Téléphone : ${animal.membre_associé.telephone}</p>`;
+                const memberDiv = document.createElement("div");
+                memberDiv.innerHTML = memberDetailsHtml;
+                animalDetails.appendChild(memberDiv);
+            });
+        }
+    </script>
+    
+</body>
 </html>

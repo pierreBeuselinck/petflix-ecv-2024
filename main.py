@@ -1,10 +1,22 @@
-from fastapi import APIRouter, Request, Depends, HTTPException
+from fastapi import APIRouter, Request, HTTPException
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date
-from sqlalchemy.orm import sessionmaker, Session 
+from sqlalchemy.orm import sessionmaker 
 from sqlalchemy.ext.declarative import declarative_base
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 import logging
 
 app = APIRouter()
+app = FastAPI()
+
+# Configuration des en-têtes CORS
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["GET", "POST", "PUT", "DELETE"],
+    allow_headers=["*"],
+)
 
 logging.basicConfig(level=logging.INFO)
 
@@ -82,38 +94,43 @@ async def video_details(request: Request, video_id: int):
     if video is None:
         raise HTTPException(status_code=404, detail=f"Vidéo non trouvée : {video_id}")
     
-    # Récupérer les détails de l'animal associé à la vidéo
-    animal = db.query(Animal).filter(Animal.id_video == video_id).first()
-    if animal is None:
-        raise HTTPException(status_code=404, detail=f"Animal non trouvé pour la vidéo : {video_id}")
+    # détails de la vidéo
+    video_details = {
+        "id": video.id_video, 
+        "titre": video.titre, 
+        "description": video.description, 
+        "url": video.url, 
+        "date_ajout": video.date_ajout.strftime("%Y-%m-%d")
+    }
     
-    # Récupérer les détails du membre de l'association
-    member = db.query(Membre).filter(Membre.id_membres == animal.id_membres).first()
-    if member is None:
-        raise HTTPException(status_code=404, detail=f"Membre non trouvé pour l'animal associé à la vidéo : {video_id}")
-    
-    return {
-        "video": {
-            "id": video.id_video, 
-            "titre": video.titre, 
-            "description": video.description, 
-            "url": video.url, 
-            "date_ajout": video.date_ajout.strftime("%Y-%m-%d")
-        },
-        "animal": {
+    # détails de tous les animaux associés à la vidéo
+    animals = db.query(Animal).filter(Animal.id_video == video_id).all()
+    animals_details = []
+    for animal in animals:
+        # détails du membre de l'association associé à l'animal
+        member = db.query(Membre).filter(Membre.id_membres == animal.id_membres).first()
+        if member is None:
+            raise HTTPException(status_code=404, detail=f"Membre non trouvé pour l'animal associé à la vidéo : {video_id}")
+        
+        animal_details = {
             "id": animal.id_animal,
             "type": animal.type,
             "nom": animal.nom,
             "age": animal.age,
             "date_arrive": animal.date_arrive.strftime("%Y-%m-%d"),
-            "date_adoption": animal.date_adoption.strftime("%Y-%m-%d") if animal.date_adoption else None
-        },
-        "membre_associé": {
-            "id": member.id_membres,
-            "nom": member.nom,
-            "prenom": member.prenom,
-            "ville": member.ville,
-            "email": member.email,
-            "telephone": member.telephone
+            "date_adoption": animal.date_adoption.strftime("%Y-%m-%d") if animal.date_adoption else None,
+            "membre_associé": {
+                "id": member.id_membres,
+                "nom": member.nom,
+                "prenom": member.prenom,
+                "ville": member.ville,
+                "email": member.email,
+                "telephone": member.telephone
+            }
         }
+        animals_details.append(animal_details)
+    
+    return {
+        "video": video_details,
+        "animaux_associés": animals_details
     }

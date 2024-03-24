@@ -27,3 +27,7 @@ Thumbs.db
 
 # Tailwind output file
 /assets/css/style.css
+
+# Fichiers bytecode Python
+*.pyc
+__pycache__/

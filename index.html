@@ -1,33 +1,51 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petflix</title>
-
-    <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" type="image/png" href="./assets/images/icon.png">
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/app.css">
 </head>
-
 <body>
-    <header></header>
-    <main>
-        <input type="search" name="" id="">
-        <div>
-            <div>
-                Date d'ajout
-            </div>
-            <div>
-                <div>
-                    <img src="" alt="" srcset="">
-                    <p>Titre</p>
-                    <p>Description</p>
-                </div>
-            </div>
+    <div class="container">
+        <div id="videos-container">
         </div>
-    </main>
-    <footer></footer>
-</body>
+    </div>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            fetchVideos();
+        });
+
+        async function fetchVideos() {
+            try {
+                const response = await fetch("http://localhost:8000/videos/");
+                if (!response.ok) {
+                    throw new Error(`Erreur lors de la récupération des vidéos : ${response.status}`);
+                }
+                const data = await response.json();
+                displayVideos(data.videos);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des vidéos :", error);
+            }
+        }
+
+        function displayVideos(videos) {
+            const videosContainer = document.getElementById("videos-container");
+            videos.forEach(video => {
+                const videoHtml = `
+                    <div class="video">
+                        <h4><a href="video.html?id=${video.id}">${video.titre}</a></h4>
+                        <video class="video" controls>
+                            <source src="${video.url}" type="video/mp4">
+                        </video>
+                    </div>
+                `;
+                videosContainer.innerHTML += videoHtml;
+            });
+        }
+    </script>
+</body>
 </html>
