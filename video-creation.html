@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter une vidéo</title>
-
+    <link rel="icon" type="image/png" href="./assets/images/icon.png">
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/app.css">
 </head>
@@ -17,29 +17,58 @@
     <main>
         <h1>Ajouter une vidéo d’adoption</h1>
 
-        <form action="">
+        <form id="video-form">
             <div>
                 <div>
-                    <label for="url">Url de la video</label>
-                    <input type="url" name="url" id="">
-                </div>
-                <div>
                     <label for="titre">Titre</label>
-                    <input type="text" name="titre" id="">
+                    <input type="text" name="titre" id="titre">
                 </div>
                 <div>
                     <label for="description">Description</label>
-                    <input type="text" name="description" id="">
+                    <input type="text" name="description" id="description">
                 </div>
                 <div>
-                    <label for="animaux">Description</label>
-                    <select name="animaux" id=""></select>
+                    <label for="url">Url de la vidéo</label>
+                    <input type="url" name="url" id="url">
+                </div>
+                <div>
+                    <label for="date_ajout">Date d'ajout</label>
+                    <input type="text" name="date_ajout" id="date_ajout">
                 </div>
             </div>
             <button type="submit">Enregistrer</button>
         </form>
     </main>
     <footer></footer>
-</body>
 
+    <script>
+        document.getElementById('video-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                titre: document.getElementById('titre').value,
+                description: document.getElementById('description').value,
+                url: document.getElementById('url').value,
+                date_ajout: document.getElementById('date_ajout').value
+            };
+            fetch('http://localhost:8000/create-video', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                alert('Vidéo ajoutée avec succès');
+                document.getElementById('video-form').reset();
+            })
+            .catch(error => {
+                console.error('Erreur :', error);
+                alert('Une erreur est survenue lors de l\'ajout de la vidéo');
+            });
+        });
+    </script>
+</body>
 </html>

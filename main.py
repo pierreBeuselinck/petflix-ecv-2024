@@ -204,7 +204,12 @@ async def add_video(request: Request, video_data: VideoData):
         db = SessionLocal()
         
         date_ajout = datetime.strptime(video_data.date_ajout, "%Y-%m-%d").date()
-        new_video = Video(titre=video_data.titre, description=video_data.description, url=video_data.url, date_ajout=date_ajout)
+        new_video = Video (
+            titre=video_data.titre, 
+            description=video_data.description, 
+            url=video_data.url, 
+            date_ajout=date_ajout
+        )
         
         db.add(new_video)
         db.commit()
