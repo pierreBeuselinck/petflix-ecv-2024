@@ -19,8 +19,10 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Connexion à la base de données PetFlix
-DATABASE_URL = "mysql://chaimaa:chaimaa@127.0.0.1:3306/PetFlix"
+# Connexion à la base de données PetFlix (chaimaa)
+#DATABASE_URL = "mysql://chaimaa:chaimaa@127.0.0.1:3306/PetFlix"
+
+DATABASE_URL = "mysql://root@localhost/PetFlix"
 engine = create_engine(DATABASE_URL)
 
 logging.info("Connexion à la base de données PetFlix")

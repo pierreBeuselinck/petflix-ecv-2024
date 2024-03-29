@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : localhost
--- Généré le : ven. 22 mars 2024 à 11:45
+-- Généré le : ven. 29 mars 2024 à 08:31
 -- Version du serveur : 10.4.27-MariaDB
 -- Version de PHP : 8.0.25
 
@@ -86,7 +86,8 @@ CREATE TABLE `animal` (
 
 INSERT INTO `animal` (`id_animal`, `type`, `nom`, `age`, `date_arrive`, `date_adoption`, `id_video`, `id_membres`) VALUES
 (1, 'Chat', 'Minou', 2, '2023-12-24 00:00:00', '2024-03-01 11:38:09', 1, 1),
-(2, 'Chien', 'Max', 5, '2023-06-01 00:00:00', '2023-10-17 11:39:17', 2, 2);
+(2, 'Chien', 'Max', 5, '2023-06-01 00:00:00', '2023-10-17 11:39:17', 2, 2),
+(4, 'Chat', 'Felix', 3, '2024-03-24 16:41:42', NULL, 1, 2);
 
 -- --------------------------------------------------------
 
@@ -128,7 +129,8 @@ CREATE TABLE `membresAsso` (
 
 INSERT INTO `membresAsso` (`id_membres`, `nom`, `prenom`, `ville`, `email`, `telephone`) VALUES
 (1, 'Dupont', 'Jean', 'Paris', 'dupont@example.com', '0123456789'),
-(2, 'Durand', 'Marie', 'Lyon', 'durand@example.com', '0987654321');
+(2, 'Durand', 'Marie', 'Lyon', 'durand@example.com', '0987654321'),
+(8, 'Doe', 'John', 'New York', 'john@example.com', '1234567890');
 
 -- --------------------------------------------------------
 
@@ -151,7 +153,8 @@ CREATE TABLE `video` (
 INSERT INTO `video` (`id_video`, `titre`, `description`, `url`, `date_ajout`) VALUES
 (1, 'Chatons mignons à adopter', 'Découvrez ces adorables chatons qui attendent un nouveau foyer.', 'https://youtu.be/4O7D-n5eqdE', '2023-11-14'),
 (2, 'Un chien affectueux cherche sa famille', 'Ce chien adorable et affectueux recherche une famille aimante pour le reste de sa vie.', 'https://www.youtube.com/watch?v=HbFg1dm6v4Y', '2023-11-15'),
-(3, 'Border collie et son chat roux', 'Border collie et son chat roux', 'https://www.youtube.com/watch?v=wwZexYjfZIk', '2023-11-16');
+(3, 'Border collie et son chat roux', 'Border collie et son chat roux', 'https://www.youtube.com/watch?v=wwZexYjfZIk', '2023-11-16'),
+(4, 'Chaton joueur', 'Un chaton joueur qui adore les câlins.', 'https://www.youtube.com/watch?v=abcdefg', '2024-03-24');
 
 --
 -- Index pour les tables déchargées
@@ -220,7 +223,7 @@ ALTER TABLE `adoption`
 -- AUTO_INCREMENT pour la table `animal`
 --
 ALTER TABLE `animal`
-  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pour la table `controle`
@@ -232,13 +235,13 @@ ALTER TABLE `controle`
 -- AUTO_INCREMENT pour la table `membresAsso`
 --
 ALTER TABLE `membresAsso`
-  MODIFY `id_membres` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_membres` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `video`
 --
 ALTER TABLE `video`
-  MODIFY `id_video` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_video` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- Contraintes pour les tables déchargées
