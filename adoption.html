@@ -5,46 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ajouter une adoption</title>
-
+    <link rel="icon" type="image/png" href="./assets/images/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
 
-<body>
-    <header>
-        <a href="index.html">Revenir à l'accueil</a>
+<body class="bg-gray-900 text-white">
+    <header class="bg-gray-800 text-white p-4">
+        <div class="container mx-auto">
+            <a href="index.html" class="underline">Revenir à l'accueil</a>
+        </div>
     </header>
-    <main>
-        <h1>Ajouter une adoption</h1>
+    <main class="container mx-auto mt-8">
+        <h1 class="text-xl font-bold mb-6">Ajouter une adoption</h1>
 
-        <form action="">
-            <div>
+        <form class="space-y-6">
+            <div class="space-y-4">
                 <div>
-                    <label for="date">Date de l’adoption</label>
-                    <input type="date" name="date" id="">
+                    <label for="date" class="block font-semibold">Date de l’adoption</label>
+                    <input type="date" name="date" id="date" class="w-full p-2 rounded bg-gray-700 text-white">
                 </div>
                 <div>
-                    <label for="animal">Nom d’animal (animaux)</label>
-                    <input type="text" name="animal" id="">
+                    <label for="animal" class="block font-semibold">Nom d’animal (animaux)</label>
+                    <input type="text" name="animal" id="animal" class="w-full p-2 rounded bg-gray-700 text-white">
                 </div>
-                <p>Adoptant</p>
+                <p class="font-semibold">Adoptant</p>
                 <div>
-                    <label for="adoptant">Nom - Prénom</label>
-                    <input type="text" name="adoptant" id="">
-                </div>
-                <div>
-                    <label for="adresse">Adresse</label>
-                    <input type="text" name="adresse" id="">
+                    <label for="adoptant" class="block font-semibold">Nom - Prénom</label>
+                    <input type="text" name="adoptant" id="adoptant" class="w-full p-2 rounded bg-gray-700 text-white">
                 </div>
                 <div>
-                    <label for="mail">Email</label>
-                    <input type="email" name="mail" id="">
+                    <label for="adresse" class="block font-semibold">Adresse</label>
+                    <input type="text" name="adresse" id="adresse" class="w-full p-2 rounded bg-gray-700 text-white">
+                </div>
+                <div>
+                    <label for="mail" class="block font-semibold">Email</label>
+                    <input type="email" name="mail" id="mail" class="w-full p-2 rounded bg-gray-700 text-white">
                 </div>
             </div>
-            <button type="submit">Enregistrer</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold">Enregistrer</button>
         </form>
     </main>
-    <footer></footer>
+    <footer class="bg-gray-800 p-4 mt-8">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>2024 - Petflix</p>
+        </div>
+    </footer>
 </body>
 
 </html>

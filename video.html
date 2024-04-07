@@ -1,28 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Détails de la vidéo</title>
     <link rel="icon" type="image/png" href="./assets/images/icon.png">
-    <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="stylesheet" href="assets/css/app.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/app.css">
 </head>
-<body>
-    <header>
-        <a href="index.html">Revenir à l'accueil</a>
+
+<body class="bg-gray-900 text-white">
+    <header class="bg-black p-4">
+        <div class="container mx-auto">
+            <a href="index.html" class="text-white underline">Revenir à l'accueil</a>
+        </div>
     </header>
-    <main>
-        <video width="640" height="360" controls id="video-player"></video>
-        <div id="video-details">
-            <h1 id="video-title"></h1>
-            <p id="video-description"></p>
-            <span id="animal-status"></span>
-            <div id="animal-details"></div>
-            <div id="member-details"></div>
+
+    <main class="container mx-auto my-8">
+        <video width="640" height="360" controls id="video-player" class="mx-auto"></video>
+        <div id="video-details" class="mt-8">
+            <h1 id="video-title" class="text-3xl font-bold"></h1>
+            <p id="video-description" class="mt-4"></p>
+            <span id="animal-status" class="mt-4 inline-block"></span>
+            <div id="animal-details" class="mt-4"></div>
+            <div id="member-details" class="mt-4"></div>
         </div>
     </main>
-    <footer></footer>
+
+    <footer class="bg-black p-4 mt-8">
+        <div class="container mx-auto text-center">
+            <p>2024 - Petflix</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {
@@ -30,7 +41,7 @@
             const videoId = params.get("id");
             fetchVideoDetails(videoId);
         });
-    
+
         async function fetchVideoDetails(videoId) {
             try {
                 const response = await fetch(`http://localhost:8000/videos/${videoId}/details`);
@@ -43,19 +54,19 @@
                 console.error("Erreur lors de la récupération des détails de la vidéo :", error);
             }
         }
-    
+
         function displayVideoDetails(data) {
             const videoPlayer = document.getElementById("video-player");
             const videoTitle = document.getElementById("video-title");
             const videoDescription = document.getElementById("video-description");
-    
+
             videoPlayer.src = data.video.url;
             videoTitle.textContent = data.video.titre;
             videoDescription.textContent = data.video.description;
-    
+
             const animalDetails = document.getElementById("animal-details");
             animalDetails.innerHTML = "";
-    
+
             data.animaux_associés.forEach(animal => {
                 const animalDetailsHtml = `
                     <h2>Détails de l'animal :</h2>
@@ -67,7 +78,7 @@
                 const animalDiv = document.createElement("div");
                 animalDiv.innerHTML = animalDetailsHtml;
                 animalDetails.appendChild(animalDiv);
-    
+
                 const memberDetailsHtml = `
                     <h3>Détails du membre de l'association :</h3>
                     <p>Nom : ${animal.membre_associé.nom}</p>
@@ -81,6 +92,7 @@
             });
         }
     </script>
-    
+
 </body>
+
 </html>

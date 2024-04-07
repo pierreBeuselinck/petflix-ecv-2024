@@ -5,14 +5,49 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Petflix</title>
     <link rel="icon" type="image/png" href="./assets/images/icon.png">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/app.css">
 </head>
-<body>
-    <div class="container">
-        <div id="videos-container">
+<body class="bg-gray-900 text-white">
+    <header class="bg-black py-4">
+        <div class="container mx-auto flex justify-between items-center">
+            <img src="assets/images/petflix-logo.png" alt="Petflix" class="h-8">
+            <nav>
+                <ul class="flex space-x-4">
+                    <li><a href="#" class="hover:text-gray-400">Accueil</a></li>
+                    <li><a href="#" class="hover:text-gray-400">Animaux</a></li>
+                    <li><a href="#" class="hover:text-gray-400">À propos</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <div class="container mx-auto py-6">
+        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
         </div>
     </div>
+    <footer class="bg-black py-4 mt-8">
+        <div class="container mx-auto flex justify-between items-center">
+            <ul class="flex">
+                <li class="mr-4">
+                    <a href="#">
+                        <img src="assets/images/social-media/facebook.png" alt="Facebook" class="h-5">
+                    </a>
+                </li>
+                <li class="mr-4">
+                    <a href="#">
+                        <img src="assets/images/social-media/twitter.png" alt="Twitter" class="h-5">
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <img src="assets/images/social-media/youtube.png" alt="YouTube" class="h-5">
+                    </a>
+                </li>
+            </ul>
+            <p class="text-gray-400">2024 - Petflix</p>
+        </div>
+    </footer>
 
     <script>
         document.addEventListener("DOMContentLoaded", function () {

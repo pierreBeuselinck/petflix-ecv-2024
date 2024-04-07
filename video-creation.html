@@ -8,38 +8,49 @@
     <link rel="icon" type="image/png" href="./assets/images/icon.png">
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/app.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
 
-<body>
-    <header>
-        <a href="index.html">Revenir à l'accueil</a>
-    </header>
-    <main>
-        <h1>Ajouter une vidéo d’adoption</h1>
+<body class="bg-gray-900 text-white">
 
-        <form id="video-form">
-            <div>
+    <header class="text-white py-4 bg-gray-800">
+        <div class="container mx-auto">
+            <a href="index.html" class="underline">Revenir à l'accueil</a>
+        </div>
+    </header>
+
+    <main class="container mx-auto mt-10">
+        <h1 class="text-2xl font-bold mb-5">Ajouter une vidéo d’adoption</h1>
+
+        <form id="video-form" class="space-y-4">
+            <div class="space-y-2">
                 <div>
-                    <label for="titre">Titre</label>
-                    <input type="text" name="titre" id="titre">
+                    <label for="titre" class="block font-semibold">Titre</label>
+                    <input type="text" name="titre" id="titre" class="w-full p-2 rounded text-gray-900">
                 </div>
                 <div>
-                    <label for="description">Description</label>
-                    <input type="text" name="description" id="description">
+                    <label for="description" class="block font-semibold">Description</label>
+                    <input type="text" name="description" id="description" class="w-full p-2 rounded text-gray-900">
                 </div>
                 <div>
-                    <label for="url">Url de la vidéo</label>
-                    <input type="url" name="url" id="url">
+                    <label for="url" class="block font-semibold">Url de la vidéo</label>
+                    <input type="url" name="url" id="url" class="w-full p-2 rounded text-gray-900">
                 </div>
                 <div>
-                    <label for="date_ajout">Date d'ajout (aaaa-mm-jj)</label>
-                    <input type="text" name="date_ajout" id="date_ajout">
+                    <label for="date_ajout" class="block font-semibold">Date d'ajout (aaaa-mm-jj)</label>
+                    <input type="text" name="date_ajout" id="date_ajout" class="w-full p-2 rounded text-gray-900">
                 </div>
             </div>
-            <button type="submit">Enregistrer</button>
+            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Enregistrer</button>
         </form>
     </main>
-    <footer></footer>
+    
+    <footer class="bg-gray-800 py-4 mt-8">
+        <div class="container mx-auto text-center text-gray-400">
+            <p>2024 - Petflix</p>
+        </div>
+    </footer>
+
 
     <script>
         document.getElementById('video-form').addEventListener('submit', function(event) {
