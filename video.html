@@ -23,7 +23,7 @@
         <div id="video-player" class="mx-auto"></div>
         <div id="iframe-container" class="hidden"></div>
         <div id="video-details" class="mt-8">
-            <p id="video-description" class="mt-4"></p>
+            <p id="video-description" class="mt-2"></p>
             <span id="animal-status" class="mt-4 inline-block"></span>
             <div id="animal-details" class="mt-4"></div>
             <div id="member-details" class="mt-4"></div>
@@ -81,15 +81,15 @@
 
             data.animaux_associés.forEach(animal => {
                 const animalDetailsHtml = `
-                    <h2 class='my-4 text-l font-bold'>Détails de l'animal :</h2>
+                    <h2 class='my-2 text-l font-bold'>Détails de l'animal :</h2>
                     <li>Type : ${animal.type}</li>
                     <li>Nom : ${animal.nom}</li>
                     <li>Age : ${animal.age}</li>
                     <li>Date d'arrivée : ${animal.date_arrive}</li>
-                    <li>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : "Non adopté"}</li>`;
+                    <li class='my-2'>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : `<span class='bg-red-700 text-white-600 px-1 py-1 rounded-md'>Non adopté</span>`}</li>`;
                 const animalDiv = document.createElement("div");
                 animalDiv.innerHTML = animalDetailsHtml;
-                animalDetails.appendChild(animalDiv);
+                animalDetails.appendChild(animalDiv);    
 
                 const memberDetailsHtml = `
                     <h2 class='my-4 text-l font-bold'>Détails du membre de l'association :</h2>

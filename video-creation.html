@@ -19,38 +19,39 @@
         </div>
     </header>
 
-    <main class="container mx-auto mt-10">
-        <h1 class="text-2xl font-bold mb-5">Ajouter une vidéo d’adoption</h1>
-
-        <form id="video-form" class="space-y-4">
-            <div class="space-y-2">
-                <div>
-                    <label for="titre" class="block font-semibold">Titre</label>
-                    <input type="text" name="titre" id="titre" class="w-full p-2 rounded text-gray-900">
+    <main class="container mx-auto mt-10 flex justify-center">
+        <div class="w-full max-w-2xl">
+            <h1 class="text-2xl font-bold mb-8">Ajouter une vidéo d’adoption</h1>
+    
+            <form id="video-form" class="space-y-4">
+                <div class="space-y-2">
+                    <div>
+                        <label for="titre" class="block my-3 font-semibold">Titre</label>
+                        <input type="text" name="titre" id="titre" class="w-full p-2 rounded text-gray-900">
+                    </div>
+                    <div>
+                        <label for="description" class="block my-3 font-semibold">Description</label>
+                        <input type="text" name="description" id="description" class="w-full p-2 rounded text-gray-900">
+                    </div>
+                    <div>
+                        <label for="url" class="block my-3 font-semibold">Url de la vidéo</label>
+                        <input type="url" name="url" id="url" class="w-full p-2 rounded text-gray-900">
+                    </div>
+                    <div>
+                        <label for="date_ajout" class="block my-3 font-semibold">Date d'ajout (aaaa-mm-jj)</label>
+                        <input type="text" name="date_ajout" id="date_ajout" class="w-full p-2 rounded text-gray-900">
+                    </div>
                 </div>
-                <div>
-                    <label for="description" class="block font-semibold">Description</label>
-                    <input type="text" name="description" id="description" class="w-full p-2 rounded text-gray-900">
-                </div>
-                <div>
-                    <label for="url" class="block font-semibold">Url de la vidéo</label>
-                    <input type="url" name="url" id="url" class="w-full p-2 rounded text-gray-900">
-                </div>
-                <div>
-                    <label for="date_ajout" class="block font-semibold">Date d'ajout (aaaa-mm-jj)</label>
-                    <input type="text" name="date_ajout" id="date_ajout" class="w-full p-2 rounded text-gray-900">
-                </div>
-            </div>
-            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Enregistrer</button>
-        </form>
-    </main>
+                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Enregistrer</button>
+            </form>
+        </div>
+    </main>    
     
     <footer class="bg-gray-800 py-4 mt-8">
         <div class="container mx-auto text-center text-gray-400">
             <p>2024 - Petflix</p>
         </div>
     </footer>
-
 
     <script>
         document.getElementById('video-form').addEventListener('submit', function(event) {
