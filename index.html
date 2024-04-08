@@ -15,7 +15,7 @@
             <img src="assets/images/petflix-logo.png" alt="Petflix" class="h-8">
             <nav>
                 <ul class="flex space-x-4">
-                    <li><a href="#" class="hover:text-gray-400">Accueil</a></li>
+                    <li><a href="index.html" class="hover:text-gray-400">Accueil</a></li>
                     <li><a href="#" class="hover:text-gray-400">Animaux</a></li>
                     <li><a href="#" class="hover:text-gray-400">À propos</a></li>
                 </ul>
@@ -23,7 +23,7 @@
         </div>
     </header>
     <div class="container mx-auto py-6">
-        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
         </div>
     </div>
     <footer class="bg-black py-4 mt-8">
@@ -72,10 +72,12 @@
             videos.forEach(video => {
                 const videoHtml = `
                     <div class="video">
-                        <h4><a href="video.html?id=${video.id}">${video.titre}</a></h4>
-                        <video class="video" controls>
-                            <source src="${video.url}" type="video/mp4">
-                        </video>
+                        <iframe width="480" height="280" 
+                            src="https://www.youtube.com/embed/${video.url}"  title="YouTube video player" frameborder="0" 
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                            reibollo="strict-origin-when-cross-origin" allowfullscreen>
+                        </iframe>        
+                        <h2><a href="video.html?id=${video.id}">${video.titre}</a></h2>            
                     </div>
                 `;
                 videosContainer.innerHTML += videoHtml;
