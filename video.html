@@ -81,7 +81,7 @@
 
             data.animaux_associés.forEach(animal => {
                 const animalDetailsHtml = `
-                    <h2 class='my-4'>Détails de l'animal :</h2>
+                    <h2 class='my-4 text-l font-bold'>Détails de l'animal :</h2>
                     <li>Type : ${animal.type}</li>
                     <li>Nom : ${animal.nom}</li>
                     <li>Age : ${animal.age}</li>
@@ -92,7 +92,7 @@
                 animalDetails.appendChild(animalDiv);
 
                 const memberDetailsHtml = `
-                    <h2 class='my-4'>Détails du membre de l'association :</h2>
+                    <h2 class='my-4 text-l font-bold'>Détails du membre de l'association :</h2>
                     <li>Nom : ${animal.membre_associé.nom}</li>
                     <li>Prénom : ${animal.membre_associé.prenom}</li>
                     <li>Ville : ${animal.membre_associé.ville}</li>
