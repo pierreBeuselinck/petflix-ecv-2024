@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,7 +9,6 @@
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/style.css">
 </head>
-
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 text-white p-4">
         <div class="container mx-auto">
@@ -20,7 +18,7 @@
     <main class="container mx-auto mt-8">
         <h1 class="text-xl font-bold mb-6">Ajouter une adoption</h1>
 
-        <form class="space-y-6">
+        <form id="adoption-form" class="space-y-6">
             <div class="space-y-4">
                 <div>
                     <label for="date" class="block font-semibold">Date de l’adoption</label>
@@ -52,6 +50,34 @@
             <p>2024 - Petflix</p>
         </div>
     </footer>
-</body>
 
+    <script>
+        document.getElementById('adoption-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            const formData = {
+                date: document.getElementById('date').value,
+                animal: document.getElementById('animal').value,
+                adoptant: document.getElementById('adoptant').value,
+                adresse: document.getElementById('adresse').value,
+                mail: document.getElementById('mail').value
+            };
+            fetch('http://localhost:8000/create-adoption', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Adoption ajoutée avec succès');
+                document.getElementById('adoption-form').reset(); // Réinitialiser le formulaire après l'envoi réussi
+            })
+            .catch(error => {
+                console.error('Erreur lors de l\'envoi des données d\'adoption:', error);
+                alert('Une erreur est survenue lors de l\'ajout de l\'adoption');
+            });
+        });
+    </script>
+</body>
 </html>
