@@ -19,26 +19,11 @@
         </div>
     </header>
 
-    <main class="container mx-auto my-8">
-        <div class="bg-gray-700 rounded-lg shadow-md p-6 flex items-center space-x-4">
-            <div>
-                <img src="chemin-vers-l-image-de-l-animal" alt="Image de l'animal" class="rounded-full h-32 w-32 bg-gray-600">
-            </div>
-            <div>
-                <div class="mb-4">
-                    <p class="font-bold">Raoul</p>
-                    <p>05/05/2024</p>
-                </div>
-                <div class="mb-4">
-                    <p class="font-bold">Adoptant</p>
-                    <p>Émilie Lefebvre</p>
-                    <p>45 Avenue des Lilas, 33000 Bordeaux, France</p>
-                </div>
-                <div>
-                    <p class="font-bold">Membre</p>
-                    <p>Julien Dupont</p>
-                </div>
-            </div>
+    <main class="container mx-auto mt-8">
+        <h1 class="text-xl font-bold mb-6">Informations de Contrôle d'Adoption</h1>
+        <div id="controleInfo">
+            <p>Date du contrôle : <span id="dateControle"></span></p>
+            <p>Nom de l'adoptant : <span id="nomAdoptant"></span></p>
         </div>
     </main>
 
@@ -47,5 +32,23 @@
             <p>2024 - Petflix</p>
         </div>
     </footer>
+
+    <script>
+        const adoptantId = 'ID_Ici'; //A mettre a jour
+        fetch(`http://localhost:8000/api/controles/${adoptantId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Problème lors de la récupération des données');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('dateControle').textContent = new Date(data.dateControle).toLocaleDateString("fr-FR");
+                document.getElementById('nomAdoptant').textContent = data.adoptant;
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
+    </script>
 </body>
 </html>
