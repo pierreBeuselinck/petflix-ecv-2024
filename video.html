@@ -18,17 +18,18 @@
         </div>
     </header>
 
-    <main class="container mx-auto my-8">
-        <video width="640" height="360" controls id="video-player" class="mx-auto"></video>
+    <main class="container mx-auto flex flex-col items-center justify-center my-8">
+        <h1 id="video-title" class="text-3xl my-8 font-bold"></h1>
+        <div id="video-player" class="mx-auto"></div>
+        <div id="iframe-container" class="hidden"></div>
         <div id="video-details" class="mt-8">
-            <h1 id="video-title" class="text-3xl font-bold"></h1>
             <p id="video-description" class="mt-4"></p>
             <span id="animal-status" class="mt-4 inline-block"></span>
             <div id="animal-details" class="mt-4"></div>
             <div id="member-details" class="mt-4"></div>
         </div>
     </main>
-
+    
     <footer class="bg-black p-4 mt-8">
         <div class="container mx-auto text-center">
             <p>2024 - Petflix</p>
@@ -60,8 +61,19 @@
             const videoTitle = document.getElementById("video-title");
             const videoDescription = document.getElementById("video-description");
 
-            videoPlayer.src = data.video.url;
             videoTitle.textContent = data.video.titre;
+            
+            const iframeContainer = document.getElementById("iframe-container");
+            const iframeHtml = `
+                <iframe width="680" height="400" 
+                    src="https://www.youtube.com/embed/${data.video.url}"  title="YouTube video player" frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    reibollo="strict-origin-when-cross-origin" allowfullscreen>
+                </iframe>`;
+            iframeContainer.innerHTML = iframeHtml;
+            iframeContainer.classList.remove("hidden");
+            videoPlayer.classList.add("hidden");
+    
             videoDescription.textContent = data.video.description;
 
             const animalDetails = document.getElementById("animal-details");
@@ -69,23 +81,23 @@
 
             data.animaux_associés.forEach(animal => {
                 const animalDetailsHtml = `
-                    <h2>Détails de l'animal :</h2>
-                    <p>Type : ${animal.type}</p>
-                    <p>Nom : ${animal.nom}</p>
-                    <p>Age : ${animal.age}</p>
-                    <p>Date d'arrivée : ${animal.date_arrive}</p>
-                    <p>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : "Non adopté"}</p>`;
+                    <h2 class='my-4'>Détails de l'animal :</h2>
+                    <li>Type : ${animal.type}</li>
+                    <li>Nom : ${animal.nom}</li>
+                    <li>Age : ${animal.age}</li>
+                    <li>Date d'arrivée : ${animal.date_arrive}</li>
+                    <li>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : "Non adopté"}</li>`;
                 const animalDiv = document.createElement("div");
                 animalDiv.innerHTML = animalDetailsHtml;
                 animalDetails.appendChild(animalDiv);
 
                 const memberDetailsHtml = `
-                    <h3>Détails du membre de l'association :</h3>
-                    <p>Nom : ${animal.membre_associé.nom}</p>
-                    <p>Prénom : ${animal.membre_associé.prenom}</p>
-                    <p>Ville : ${animal.membre_associé.ville}</p>
-                    <p>Email : ${animal.membre_associé.email}</p>
-                    <p>Téléphone : ${animal.membre_associé.telephone}</p>`;
+                    <h2 class='my-4'>Détails du membre de l'association :</h2>
+                    <li>Nom : ${animal.membre_associé.nom}</li>
+                    <li>Prénom : ${animal.membre_associé.prenom}</li>
+                    <li>Ville : ${animal.membre_associé.ville}</li>
+                    <li>Email : ${animal.membre_associé.email}</li>
+                    <li>Téléphone : ${animal.membre_associé.telephone}</li>`;
                 const memberDiv = document.createElement("div");
                 memberDiv.innerHTML = memberDetailsHtml;
                 animalDetails.appendChild(memberDiv);
