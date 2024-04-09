@@ -151,6 +151,7 @@ async def list_videos(request: Request, animal_type: str = None, member_city: st
     
     return {"videos": video_details}
 
+
 # Route qui présente les animaux à adopter avec les coordonnées du membre de l’association
 @app.get("/videos/{video_id}/details")
 async def video_details(request: Request, video_id: int):

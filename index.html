@@ -19,16 +19,32 @@
                     <li><a href="#" class="hover:text-gray-400">Animaux</a></li>
                     <li><a href="#" class="hover:text-gray-400">À propos</a></li>
                     <li><a href="video-creation.html" class="bg-red-700 text-white-600 px-4 py-2 rounded-md">Ajouter une vidéo</a></li>
-
                 </ul>
             </nav>
         </div>
     </header>
     <div class="container mx-auto py-6">
-        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center">
+        <form id="filter-form" class="mb-8 flex justify-end items-center space-x-2">
+            <div class="flex flex-wrap items-center space-x-2">
+                <label for="animal-filter" class="font-semibold">Type d'animal :</label>
+                <select name="animal-filter" id="animal-filter" class="border border-gray-300 rounded px-2 py-1 text-black">
+                    <option value="">-- Tous les types --</option>
+                    <option value="chien">Chien</option>
+                    <option value="chat">Chat</option>
+                </select>
+            </div>
+            <div class="flex flex-wrap items-center space-x-2">
+                <label for="city-filter" class="font-semibold">Ville :</label>
+                <input type="text" name="city-filter" id="city-filter" class="border border-gray-300 rounded px-2 py-1 text-black" placeholder="Ville">
+            </div>
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Chercher</button>
+        </form>
+    
+        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center mb-8">
         </div>
     </div>
-    <footer class="bg-black py-4 mt-8">
+    
+    <footer class="bg-black py-4">
         <div class="container mx-auto flex justify-between items-center">
             <ul class="flex">
                 <li class="mr-4">
@@ -54,6 +70,12 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             fetchVideos();
+            document.getElementById("filter-form").addEventListener("submit", function (event) {
+                event.preventDefault();
+                const animalFilter = document.getElementById("animal-filter").value;
+                const cityFilter = document.getElementById("city-filter").value;
+                fetchFilteredVideos(animalFilter, cityFilter);
+            });
         });
 
         async function fetchVideos() {
@@ -69,8 +91,22 @@
             }
         }
 
+        async function fetchFilteredVideos(animalType, memberCity) {
+            try {
+                const response = await fetch(`http://localhost:8000/videos/?animal_type=${animalType}&member_city=${memberCity}`);
+                if (!response.ok) {
+                    throw new Error(`Erreur lors de la récupération des vidéos filtrées : ${response.status}`);
+                }
+                const data = await response.json();
+                displayVideos(data.videos);
+            } catch (error) {
+                console.error("Erreur lors de la récupération des vidéos filtrées :", error);
+            }
+        }
+
         function displayVideos(videos) {
             const videosContainer = document.getElementById("videos-container");
+            videosContainer.innerHTML = "";
             videos.forEach(video => {
                 const videoHtml = `
                     <div class="video">
@@ -79,7 +115,7 @@
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                             reibollo="strict-origin-when-cross-origin" allowfullscreen>
                         </iframe>        
-                        <h2 class="text-l my-3 font-bold"><a href="video.html?id=${video.id}">${video.titre}</a></h2>            
+                        <h2 class="text-l underline my-3 font-bold"><a href="video.html?id=${video.id}">${video.titre}</a></h2>            
                     </div>
                 `;
                 videosContainer.innerHTML += videoHtml;

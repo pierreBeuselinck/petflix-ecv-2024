@@ -86,7 +86,7 @@
                     <li>Nom : ${animal.nom}</li>
                     <li>Age : ${animal.age}</li>
                     <li>Date d'arrivée : ${animal.date_arrive}</li>
-                    <li class='my-2'>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : `<span class='bg-red-700 text-white-600 px-1 py-1 rounded-md'>Non adopté</span>`}</li>`;
+                    <li class='my-2'>Date d'adoption : ${animal.date_adoption ? animal.date_adoption : `<span class='bg-red-700 text-white px-2 py-1 rounded-full'>Non adopté</span>`}</li>`;
                 const animalDiv = document.createElement("div");
                 animalDiv.innerHTML = animalDetailsHtml;
                 animalDetails.appendChild(animalDiv);    
