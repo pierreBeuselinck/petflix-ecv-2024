@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>controles</title>
+    <title>Controles</title>
     <link rel="icon" type="image/png" href="./assets/images/petflix-logo.png">
     <link rel="stylesheet" href="assets/css/reset.css">
     <link rel="stylesheet" href="assets/css/app.css">
@@ -20,10 +20,20 @@
     </header>
 
     <main class="container mx-auto mt-8">
-        <h1 class="text-xl font-bold mb-6">Informations de Contrôle d'Adoption</h1>
+        <h1 class="text-xl font-bold mb-6">Contrôle à venir</h1>
         <div id="controleInfo">
-            <p>Date du contrôle : <span id="dateControle"></span></p>
-            <p>Nom de l'adoptant : <span id="nomAdoptant"></span></p>
+            <table class="min-w-full divide-y divide-gray-200">
+                <thead class="bg-gray-800">
+                    <tr>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date du contrôle</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom et Prénom de l'adoptant</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date d'adoption</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom de l'animal</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white text-black divide-y divide-gray-200" id="controlesTable">
+                </tbody>
+            </table>
         </div>
     </main>
 
@@ -34,21 +44,37 @@
     </footer>
 
     <script>
-        const adoptantId = 'ID_Ici'; //A mettre a jour
-        fetch(`http://localhost:8000/api/controles/${adoptantId}`)
+        fetch("http://localhost:8000/get-controles-a-venir")
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Problème lors de la récupération des données');
+                    console.log('test')
                 }
                 return response.json();
+                console.log('qsdfqsqs')
             })
             .then(data => {
-                document.getElementById('dateControle').textContent = new Date(data.dateControle).toLocaleDateString("fr-FR");
-                document.getElementById('nomAdoptant').textContent = data.adoptant;
+                const controlesTable = document.getElementById('controlesTable');
+                data.controles_a_venir.forEach(controle => {
+                    const row = controlesTable.insertRow();
+                    const dateControleCell = row.insertCell(0);
+                    dateControleCell.classList.add('px-6', 'py-3');
+                    const nomAdoptantCell = row.insertCell(1);
+                    nomAdoptantCell.classList.add('px-6', 'py-3');
+                    const dateAdoptionCell = row.insertCell(2);
+                    dateAdoptionCell.classList.add('px-6', 'py-3');
+                    const nomAnimalCell = row.insertCell(3);
+                    nomAnimalCell.classList.add('px-6', 'py-3');
+                    dateControleCell.textContent = new Date(controle.date_controle).toLocaleDateString("fr-FR");
+                    nomAdoptantCell.textContent = `${controle.nom_adoptant} ${controle.prenom_adoptant}`;
+                    dateAdoptionCell.textContent = new Date(controle.date_adoption).toLocaleDateString("fr-FR");
+                    nomAnimalCell.textContent = controle.nom_animal;
+                });
             })
             .catch(error => {
                 console.error('Erreur:', error);
             });
     </script>
 </body>
+
 </html>

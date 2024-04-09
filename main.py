@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime, timedelta
+from datetime import datetime
 import logging
 
 app = APIRouter()
@@ -79,6 +79,12 @@ class Adoption(Base):
     animal_id = Column(Integer, ForeignKey("animal.id_animal"))
     date_adoption = Column(Date)
     animal = relationship("Animal", back_populates="adoptions")
+
+class Controle(Base):
+    __tablename__ = "controle"
+    id_controle = Column(Integer, primary_key=True, index=True)
+    date_controle = Column(Date, index=True)
+    id_adoption = Column(Integer, ForeignKey("adoption.id"))
     
 # Route pour récupérer la liste des adoptants enregistrés
 @app.get("/get-adoptants")
@@ -123,7 +129,7 @@ async def list_animaux(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des animaux : {str(e)}")
 
-# Route pour récupérer les vidéos d'adoption avec un filtre sur les animaux et sur la ville des membres
+# Route pour récupérer les vidéos d'adoption
 @app.get("/videos/")
 async def list_videos(request: Request, animal_type: str = None, member_city: str = None):
     db = SessionLocal()
@@ -222,34 +228,35 @@ async def add_video(request: Request, video_data: VideoData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'ajout de la vidéo d'adoption : {str(e)}")
     
-@app.get("/get-prochains-controles")
-async def prochains_controles(request: Request):
+
+# Route pour afficher les controles à venir
+@app.get("/get-controles-a-venir")
+async def get_controles_a_venir(request: Request):
     try:
         db = SessionLocal()
-
-        date_actuelle = datetime.now()
-        date_limite = date_actuelle - timedelta(days=180)
-
-        # Requête pour récupérer les adoptions qui ont eu lieu il y a environ 6 mois
-        adoptions = db.query(Adoption).filter(Adoption.date_adoption >= date_limite).all()
-
-        prochains_controles = []
-        for adoption in adoptions:
-            animal = adoption.animal
-            if animal is None:
-                continue
-            
-            date_prochain_controle = adoption.date_adoption + timedelta(days=180)
-
-            if date_prochain_controle > date_actuelle:
-                prochains_controles.append({
-                    "animal_id": animal.id_animal,
-                    "nom": animal.nom,
-                    "type": animal.type,
-                    "date_adoption": adoption.date_adoption,
-                    "date_prochain_controle": date_prochain_controle
-                })
-
-        return {"prochains_controles": prochains_controles}
+        
+        controles_a_venir = db.execute(
+            "SELECT c.id_controle, c.date_controle, c.id_adoption, a.date_adoption, a.id_adoptant, ad.nom AS nom_adoptant, ad.prenom AS prenom_adoptant, an.nom AS nom_animal \
+            FROM controle c \
+            INNER JOIN adoption a ON c.id_adoption = a.id_adoption \
+            INNER JOIN adoptant ad ON a.id_adoptant = ad.id_adoptant \
+            INNER JOIN animal an ON a.id_animal = an.id_animal"
+        ).fetchall()
+        
+        controles_a_venir_details = [
+            {
+                "id_controle": controle.id_controle,
+                "date_controle": controle.date_controle.strftime("%Y-%m-%d"),
+                "id_adoption": controle.id_adoption,
+                "date_adoption": controle.date_adoption.strftime("%Y-%m-%d"),
+                "id_adoptant": controle.id_adoptant,
+                "nom_adoptant": controle.nom_adoptant,
+                "prenom_adoptant": controle.prenom_adoptant,
+                "nom_animal": controle.nom_animal
+            } for controle in controles_a_venir
+        ]
+        
+        return {"controles_a_venir": controles_a_venir_details}
+    
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des prochains contrôles : {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des contrôles à venir : {str(e)}")
