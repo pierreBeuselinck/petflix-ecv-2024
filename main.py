@@ -1,11 +1,11 @@
-from fastapi import APIRouter, Request, HTTPException, FastAPI
+from fastapi import APIRouter, Request, HTTPException, FastAPI, Depends
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Date
 from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from datetime import datetime
-import logging
+from datetime import datetime, timedelta
+import logging 
 
 app = APIRouter()
 app = FastAPI()
@@ -20,9 +20,9 @@ app.add_middleware(
 )
 
 # Connexion à la base de données PetFlix (chaimaa)
-#DATABASE_URL = "mysql://chaimaa:chaimaa@127.0.0.1:3306/PetFlix"
+DATABASE_URL = "mysql://chaimaa:chaimaa@127.0.0.1:3306/PetFlix"
 
-DATABASE_URL = "mysql://root@localhost/PetFlix"
+#DATABASE_URL = "mysql://root@localhost/PetFlix"
 engine = create_engine(DATABASE_URL)
 
 logging.info("Connexion à la base de données PetFlix")
@@ -85,7 +85,19 @@ class Controle(Base):
     id_controle = Column(Integer, primary_key=True, index=True)
     date_controle = Column(Date, index=True)
     id_adoption = Column(Integer, ForeignKey("adoption.id"))
-    
+
+
+class AdoptionData(BaseModel):
+    date_adoption: str
+    id_animal: int
+    id_adoptant: int
+
+class Adoption(BaseModel):
+    id_adoption: int
+    date_adoption: str
+    id_animal: int
+    id_adoptant: int
+
 # Route pour récupérer la liste des adoptants enregistrés
 @app.get("/get-adoptants")
 async def list_adoptants(request: Request):
@@ -228,7 +240,6 @@ async def add_video(request: Request, video_data: VideoData):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de l'ajout de la vidéo d'adoption : {str(e)}")
     
-
 # Route pour afficher les controles à venir
 @app.get("/get-controles-a-venir")
 async def get_controles_a_venir(request: Request):
@@ -260,3 +271,23 @@ async def get_controles_a_venir(request: Request):
     
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des contrôles à venir : {str(e)}")
+
+
+@app.post("/create-adoption")
+async def create_adoption(request: Request, adoption_data: AdoptionData):
+    try:
+        db = SessionLocal()
+
+        new_adoption = Adoption(
+            id_animal=adoption_data.id_animal,
+            id_adoptant=adoption_data.id_adoptant,
+            date_adoption=datetime.strptime(adoption_data.date_adoption, "%Y-%m-%d").date()
+        )
+
+        db.add(new_adoption)
+        db.commit()
+
+        return {"message": "Adoption créée avec succès"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Erreur lors de la création de l'adoption : {str(e)}")

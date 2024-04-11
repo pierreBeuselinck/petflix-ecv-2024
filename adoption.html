@@ -6,8 +6,8 @@
     <title>Ajouter une adoption</title>
     <link rel="icon" type="image/png" href="./assets/images/petflix-logo.png">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/reset.css">
-    <link rel="stylesheet" href="assets/css/app.css">
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/app.css">
 </head>
 <body class="bg-gray-900 text-white">
     <header class="bg-gray-800 text-white p-4">
@@ -15,36 +15,33 @@
             <a href="index.html" class="underline">Revenir à l'accueil</a>
         </div>
     </header>
-    <main class="container mx-auto mt-8">
-        <h1 class="text-xl font-bold mb-6">Ajouter une adoption</h1>
-
-        <form id="adoption-form" class="space-y-6">
-            <div class="space-y-4">
-                <div>
-                    <label for="date" class="block font-semibold">Date de l’adoption</label>
-                    <input type="date" name="date" id="date" class="w-full p-2 rounded bg-gray-700 text-white">
+    <main class="container mx-auto mt-10 flex justify-center">
+        <div class="w-full max-w-2xl">
+            <h1 class="text-2xl font-bold mb-8">Ajouter une adoption</h1>
+    
+            <form id="adoption-form" class="space-y-4">
+                <div class="space-y-2">
+                    <div>
+                        <label for="animal" class="block my-3 font-semibold">Nom de l'animal</label>
+                        <select name="animal" id="animal" class="w-full p-2 rounded text-gray-900">
+                            <option value="">Sélectionnez un animal</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="adoptant" class="block my-3 font-semibold">Nom de l'adoptant</label>
+                        <select name="adoptant" id="adoptant" class="w-full p-2 rounded text-gray-900">
+                            <option value="">Sélectionnez un adoptant</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="date" class="block my-3 font-semibold">Date d'adoption (aaaa-mm-jj)</label>
+                        <input type="text" name="date" id="date" class="w-full p-2 rounded text-gray-900">
+                    </div>
                 </div>
-                <div>
-                    <label for="animal" class="block font-semibold">Nom d’animal (animaux)</label>
-                    <input type="text" name="animal" id="animal" class="w-full p-2 rounded bg-gray-700 text-white">
-                </div>
-                <p class="font-semibold">Adoptant</p>
-                <div>
-                    <label for="adoptant" class="block font-semibold">Nom - Prénom</label>
-                    <input type="text" name="adoptant" id="adoptant" class="w-full p-2 rounded bg-gray-700 text-white">
-                </div>
-                <div>
-                    <label for="adresse" class="block font-semibold">Adresse</label>
-                    <input type="text" name="adresse" id="adresse" class="w-full p-2 rounded bg-gray-700 text-white">
-                </div>
-                <div>
-                    <label for="mail" class="block font-semibold">Email</label>
-                    <input type="email" name="mail" id="mail" class="w-full p-2 rounded bg-gray-700 text-white">
-                </div>
-            </div>
-            <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white font-semibold">Enregistrer</button>
-        </form>
-    </main>
+                <button type="submit" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded text-white">Enregistrer</button>
+            </form>
+        </div>
+    </main>    
     <footer class="bg-gray-800 p-4 mt-8">
         <div class="container mx-auto text-center text-gray-400">
             <p>2024 - Petflix</p>
@@ -55,11 +52,9 @@
         document.getElementById('adoption-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = {
-                date: document.getElementById('date').value,
-                animal: document.getElementById('animal').value,
-                adoptant: document.getElementById('adoptant').value,
-                adresse: document.getElementById('adresse').value,
-                mail: document.getElementById('mail').value
+                animalId: document.getElementById('animal').value,
+                adoptantId: document.getElementById('adoptant').value,
+                date: document.getElementById('date').value
             };
             fetch('http://localhost:8000/create-adoption', {
                 method: 'POST',
@@ -78,6 +73,38 @@
                 alert('Une erreur est survenue lors de l\'ajout de l\'adoption');
             });
         });
+
+        // Récupérer les données des animaux depuis l'API
+        fetch('http://localhost:8000/get-animaux')
+            .then(response => response.json())
+            .then(data => {
+                const selectAnimal = document.getElementById('animal');
+                data.animaux.forEach(animal => {
+                    const option = document.createElement('option');
+                    option.value = animal.id;
+                    option.textContent = animal.nom;
+                    selectAnimal.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des animaux:', error);
+            });
+
+        // Récupérer les données des adoptants depuis l'API
+        fetch('http://localhost:8000/get-adoptants')
+            .then(response => response.json())
+            .then(data => {
+                const selectAdoptant = document.getElementById('adoptant');
+                data.adoptants.forEach(adoptant => {
+                    const option = document.createElement('option');
+                    option.value = adoptant.id;
+                    option.textContent = adoptant.nom + ' ' + adoptant.prenom;
+                    selectAdoptant.appendChild(option);
+                });
+            })
+            .catch(error => {
+                console.error('Erreur lors de la récupération des adoptants:', error);
+            });
     </script>
 </body>
 </html>
