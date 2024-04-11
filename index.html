@@ -23,7 +23,7 @@
             </nav>
         </div>
     </header>
-    <div class="container mx-auto py-6">
+    <div class="2xl:container mx-auto p-6">
         <form id="filter-form" class="mb-8 flex justify-end items-center space-x-2">
             <div class="flex flex-wrap items-center space-x-2">
                 <label for="animal-filter" class="font-semibold">Type d'animal :</label>
@@ -40,7 +40,7 @@
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Chercher</button>
         </form>
     
-        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 justify-center mb-8">
+        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center mb-8 ">
         </div>
     </div>
     
@@ -109,14 +109,20 @@
             videosContainer.innerHTML = "";
             videos.forEach(video => {
                 const videoHtml = `
-                    <div class="video">
-                        <iframe width="480" height="280" 
-                            src="https://www.youtube.com/embed/${video.url}"  title="YouTube video player" frameborder="0" 
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                            reibollo="strict-origin-when-cross-origin" allowfullscreen>
-                        </iframe>        
-                        <h2 class="text-l underline my-3 font-bold"><a href="video.html?id=${video.id}">${video.titre}</a></h2>            
-                    </div>
+                <div class="video" style="position: relative;">
+                    <iframe width="480" height="280" 
+                        src="https://www.youtube.com/embed/${video.url}?controls=0&modestbranding=0"  
+                        title="YouTube video player" 
+                        frameborder="0" 
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                        reibollo="strict-origin-when-cross-origin" 
+                        allowfullscreen>
+                    </iframe>
+                    <div class="overlay" onclick="window.location.href='video.html?id=${video.id}';">
+                        <h2 class="overlay-text">${video.titre}</h2>   
+                    </div>                 
+                </div>
+
                 `;
                 videosContainer.innerHTML += videoHtml;
             });
