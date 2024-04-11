@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,25 +10,40 @@
     <link rel="stylesheet" href="./assets/css/reset.css">
     <link rel="stylesheet" href="./assets/css/app.css">
 </head>
+
 <body class="bg-gray-900 text-white">
     <header class="bg-black py-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <img src="assets/images/petflix-logo.png" alt="Petflix" class="h-10">
-            <nav>
+        <div class="container mx-auto flex justify-between items-center gap-x-4">
+            <a href="index.html">
+                <img src="assets/images/petflix-logo.png" alt="Petflix" class="h-10">
+            </a>
+            <nav class="flex justify-between items-center gap-x-2 w-full">
                 <ul class="flex space-x-4">
                     <li><a href="index.html" class="hover:text-gray-400">Accueil</a></li>
                     <li><a href="video-creation.html" class="hover:text-gray-400">Videos</a></li>
                     <li><a href="controle.html" class="hover:text-gray-400">Controles</a></li>
-                    <li><a href="adoption.html" class="bg-red-700 text-white-600 px-4 py-2 rounded-md">Ajouter une adoption</a></li>
                 </ul>
+                <a href="adoption.html" class="bg-red-700 text-white-600 px-4 py-2 rounded-md">
+                    Ajouter une adoption
+                </a>
             </nav>
         </div>
     </header>
+    <div id="video-cover" class="video-cover">
+    </div>
+
+    <div class="2xl:container mx-auto mt-16 mb-9 px-6">
+        <h2 class="text-4xl">
+            Top 10 des vidéos aujourd'hui
+        </h2>
+    </div>
+
     <div class="2xl:container mx-auto p-6">
         <form id="filter-form" class="mb-8 flex justify-end items-center space-x-2">
             <div class="flex flex-wrap items-center space-x-2">
                 <label for="animal-filter" class="font-semibold">Type d'animal :</label>
-                <select name="animal-filter" id="animal-filter" class="border border-gray-300 rounded px-2 py-1 text-black">
+                <select name="animal-filter" id="animal-filter"
+                    class="border border-gray-300 rounded px-2 py-1 text-black">
                     <option value="">-- Tous les types --</option>
                     <option value="chien">Chien</option>
                     <option value="chat">Chat</option>
@@ -35,15 +51,17 @@
             </div>
             <div class="flex flex-wrap items-center space-x-2">
                 <label for="city-filter" class="font-semibold">Ville :</label>
-                <input type="text" name="city-filter" id="city-filter" class="border border-gray-300 rounded px-2 py-1 text-black" placeholder="Ville">
+                <input type="text" name="city-filter" id="city-filter"
+                    class="border border-gray-300 rounded px-2 py-1 text-black" placeholder="Ville">
             </div>
             <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded">Chercher</button>
         </form>
-    
-        <div id="videos-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center mb-8 ">
-        </div>
     </div>
-    
+
+    <div id="videos-container"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-center mb-20 w-full overflow-hidden">
+    </div>
+
     <footer class="bg-black py-4">
         <div class="container mx-auto flex justify-between items-center">
             <ul class="flex">
@@ -105,11 +123,44 @@
         }
 
         function displayVideos(videos) {
+            if (videos.length === 0) {
+                console.log("Aucune vidéo à afficher.");
+                return;
+            }
+
+            // Sélectionnez le conteneur pour la vidéo de couverture
+            const videoCoverContainer = document.getElementById("video-cover");
+
+            // Extraire la première vidéo de la liste
+            const firstVideo = videos[0];
+
+            // Construire l'HTML pour la première vidéo
+            const videoCoverHtml = `
+            <div class="relative w-full h-full">
+                <iframe width="480" height="280" 
+                src="https://www.youtube.com/embed/${firstVideo.url}?autoplay=1&controls=0&modestbranding=1&mute=1"  
+                title="YouTube video player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen>
+            </iframe>
+                <div  class="overlay" onclick="window.location.href='video.html?id=${firstVideo.id}';">
+                    <h2 class="overlay-text">${firstVideo.titre}</h2>
+                </div>
+            </div>
+            `;
+
+            videoCoverContainer.innerHTML = videoCoverHtml;
+
+
+            // Sélectionnez le conteneur pour les autres vidéos
             const videosContainer = document.getElementById("videos-container");
-            videosContainer.innerHTML = "";
-            videos.forEach(video => {
+            videosContainer.innerHTML = ""; // Nettoyez le conteneur existant
+
+            // Parcourir les vidéos restantes et les ajouter au conteneur
+            videos.slice(1).forEach(video => { // Commencez à la deuxième vidéo car la première est déjà affichée
                 const videoHtml = `
-                <div class="video" style="position: relative;">
+                <div class="video relative">
                     <iframe width="480" height="280" 
                         src="https://www.youtube.com/embed/${video.url}?controls=0&modestbranding=0"  
                         title="YouTube video player" 
@@ -122,11 +173,12 @@
                         <h2 class="overlay-text">${video.titre}</h2>   
                     </div>                 
                 </div>
-
                 `;
                 videosContainer.innerHTML += videoHtml;
             });
         }
+
     </script>
 </body>
+
 </html>
