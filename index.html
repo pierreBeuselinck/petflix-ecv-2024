@@ -96,6 +96,8 @@
             });
         });
 
+        let coverVideoId = null; // This will store the ID of the cover video
+
         async function fetchVideos() {
             try {
                 const response = await fetch("http://localhost:8000/videos/");
@@ -104,6 +106,9 @@
                 }
                 const data = await response.json();
                 displayVideos(data.videos);
+                if (data.videos.length > 0) {
+                    coverVideoId = data.videos[0].id; // Assuming each video has an 'id' property
+                }
             } catch (error) {
                 console.error("Erreur lors de la récupération des vidéos :", error);
             }
@@ -116,69 +121,65 @@
                     throw new Error(`Erreur lors de la récupération des vidéos filtrées : ${response.status}`);
                 }
                 const data = await response.json();
-                displayVideos(data.videos);
+                // Filter out the cover video from the results if it is present
+                const filteredVideos = data.videos.filter(video => video.id !== coverVideoId);
+                displayVideos(filteredVideos, false); // Pass false to indicate not to change the cover video
             } catch (error) {
                 console.error("Erreur lors de la récupération des vidéos filtrées :", error);
             }
         }
 
-        function displayVideos(videos) {
+        function displayVideos(videos, updateCover = true) {
             if (videos.length === 0) {
                 console.log("Aucune vidéo à afficher.");
                 return;
             }
 
-            // Sélectionnez le conteneur pour la vidéo de couverture
-            const videoCoverContainer = document.getElementById("video-cover");
+            if (updateCover) {
+                // Update the cover video only if required
+                const videoCoverContainer = document.getElementById("video-cover");
+                const firstVideo = videos[0];
+                const videoCoverHtml = `
+        <div class="relative w-full h-full">
+            <iframe width="480" height="280" 
+            src="https://www.youtube.com/embed/${firstVideo.url}?autoplay=1&controls=0&modestbranding=1&mute=1&loop=1&playlist=${firstVideo.url}"  
+            title="YouTube video player" 
+            frameborder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            allowfullscreen>
+        </iframe>
+            <div class="overlay" onclick="window.location.href='video.html?id=${firstVideo.id}';">
+                <h2 class="overlay-text">${firstVideo.titre}</h2>
+            </div>
+        </div>
+        `;
+                videoCoverContainer.innerHTML = videoCoverHtml;
+            }
 
-            // Extraire la première vidéo de la liste
-            const firstVideo = videos[0];
-
-            // Construire l'HTML pour la première vidéo
-            const videoCoverHtml = `
-            <div class="relative w-full h-full">
+            // Update other videos
+            const videosContainer = document.getElementById("videos-container");
+            videosContainer.innerHTML = ""; // Clear existing videos
+            videos.forEach(video => {
+                if (video.id !== coverVideoId || !updateCover) { // Exclude the cover video from the listing
+                    const videoHtml = `
+            <div class="video relative">
                 <iframe width="480" height="280" 
-                src="https://www.youtube.com/embed/${firstVideo.url}?autoplay=1&controls=0&modestbranding=1&mute=1&loop=1&playlist=${firstVideo.url}"  
-                title="YouTube video player" 
-                frameborder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                allowfullscreen>
-            </iframe>
-
-                <div  class="overlay" onclick="window.location.href='video.html?id=${firstVideo.id}';">
-                    <h2 class="overlay-text">${firstVideo.titre}</h2>
-                </div>
+                    src="https://www.youtube.com/embed/${video.url}?controls=0&modestbranding=0"  
+                    title="YouTube video player" 
+                    frameborder="0" 
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                    reibollo="strict-origin-when-cross-origin" 
+                    allowfullscreen>
+                </iframe>
+                <div class="overlay" onclick="window.location.href='video.html?id=${video.id}';">
+                    <h2 class="overlay-text">${video.titre}</h2>   
+                </div>                 
             </div>
             `;
-
-            videoCoverContainer.innerHTML = videoCoverHtml;
-
-
-            // Sélectionnez le conteneur pour les autres vidéos
-            const videosContainer = document.getElementById("videos-container");
-            videosContainer.innerHTML = ""; // Nettoyez le conteneur existant
-
-            // Parcourir les vidéos restantes et les ajouter au conteneur
-            videos.slice(1).forEach(video => { // Commencez à la deuxième vidéo car la première est déjà affichée
-                const videoHtml = `
-                <div class="video relative">
-                    <iframe width="480" height="280" 
-                        src="https://www.youtube.com/embed/${video.url}?controls=0&modestbranding=0"  
-                        title="YouTube video player" 
-                        frameborder="0" 
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                        reibollo="strict-origin-when-cross-origin" 
-                        allowfullscreen>
-                    </iframe>
-                    <div class="overlay" onclick="window.location.href='video.html?id=${video.id}';">
-                        <h2 class="overlay-text">${video.titre}</h2>   
-                    </div>                 
-                </div>
-                `;
-                videosContainer.innerHTML += videoHtml;
+                    videosContainer.innerHTML += videoHtml;
+                }
             });
         }
-
     </script>
 </body>
 
