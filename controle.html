@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,7 +10,9 @@
     <link rel="stylesheet" href="assets/css/app.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@^2.2.19/dist/tailwind.min.css" rel="stylesheet">
 </head>
+
 <body class="bg-gray-900 text-white">
+
     <header class="bg-gray-800 p-4">
         <div class="container mx-auto">
             <a href="index.html" class="underline">Revenir à l'accueil</a>
@@ -22,14 +25,13 @@
             <table class="min-w-full divide-y divide-gray-200">
                 <thead class="bg-gray-800">
                     <tr>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date du contrôle</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Nom et Prénom de l'adoptant</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Date d'adoption</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Nom de l'animal</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date du contrôle</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom et Prénom de l'adoptant</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date d'adoption</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom de l'animal</th>
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-gray-200" id="controlesTable">
-                    <!-- Data rows will be inserted here -->
+                <tbody class="bg-white text-black divide-y divide-gray-200" id="controlesTable">
                 </tbody>
             </table>
         </div>
@@ -42,49 +44,37 @@
     </footer>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            fetch("http://localhost:8000/controle")
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok: ' + response.statusText);
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    const controlesTable = document.getElementById('controlesTable');
-                    controlesTable.innerHTML = ''; // Clear any existing rows
-                    
-                    if (data.controles_a_venir.length === 0) {
-                        // Show a message if no controls are found
-                        const row = controlesTable.insertRow();
-                        const cell = row.insertCell(0);
-                        cell.textContent = "Aucun contrôle à venir trouvé.";
-                        cell.colSpan = 4;
-                        cell.classList.add('text-center', 'py-3');
-                        return;
-                    }
-                    
-                    // Populate the table with new rows
-                    data.controles_a_venir.forEach(controle => {
-                        const row = controlesTable.insertRow();
-                        row.innerHTML = `
-                            <td class="px-6 py-4 whitespace-nowrap">${controle.date_controle}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">${controle.nom_adoptant} ${controle.prenom_adoptant}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">${controle.date_adoption}</td>
-                            <td class="px-6 py-4 whitespace-nowrap">${controle.nom_animal}</td>
-                        `;
-                    });
-                })
-                .catch(error => {
-                    console.error('Failed to fetch controle data:', error);
-                    const controlesTable = document.getElementById('controlesTable');
+        fetch("http://localhost:8000/get-controles-a-venir")
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Problème lors de la récupération des données');
+                    console.log('test')
+                }
+                return response.json();
+                console.log('qsdfqsqs')
+            })
+            .then(data => {
+                const controlesTable = document.getElementById('controlesTable');
+                data.controles_a_venir.forEach(controle => {
                     const row = controlesTable.insertRow();
-                    const cell = row.insertCell(0);
-                    cell.textContent = "Erreur lors de la récupération des contrôles à venir.";
-                    cell.colSpan = 4;
-                    cell.classList.add('text-center', 'py-3');
+                    const dateControleCell = row.insertCell(0);
+                    dateControleCell.classList.add('px-6', 'py-3');
+                    const nomAdoptantCell = row.insertCell(1);
+                    nomAdoptantCell.classList.add('px-6', 'py-3');
+                    const dateAdoptionCell = row.insertCell(2);
+                    dateAdoptionCell.classList.add('px-6', 'py-3');
+                    const nomAnimalCell = row.insertCell(3);
+                    nomAnimalCell.classList.add('px-6', 'py-3');
+                    dateControleCell.textContent = new Date(controle.date_controle).toLocaleDateString("fr-FR");
+                    nomAdoptantCell.textContent = `${controle.nom_adoptant} ${controle.prenom_adoptant}`;
+                    dateAdoptionCell.textContent = new Date(controle.date_adoption).toLocaleDateString("fr-FR");
+                    nomAnimalCell.textContent = controle.nom_animal;
                 });
-        });
+            })
+            .catch(error => {
+                console.error('Erreur:', error);
+            });
     </script>
 </body>
+
 </html>
