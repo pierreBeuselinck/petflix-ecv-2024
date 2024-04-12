@@ -52,10 +52,11 @@
         document.getElementById('adoption-form').addEventListener('submit', function(event) {
             event.preventDefault();
             const formData = {
-                animalId: document.getElementById('animal').value,
-                adoptantId: document.getElementById('adoptant').value,
-                date: document.getElementById('date').value
+                id_animal: document.getElementById('animal').value,
+                id_adoptant: document.getElementById('adoptant').value,
+                date_adoption: document.getElementById('date').value
             };
+            console.log('formData', formData)
             fetch('http://localhost:8000/create-adoption', {
                 method: 'POST',
                 headers: {
