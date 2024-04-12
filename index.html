@@ -138,12 +138,13 @@
             const videoCoverHtml = `
             <div class="relative w-full h-full">
                 <iframe width="480" height="280" 
-                src="https://www.youtube.com/embed/${firstVideo.url}?autoplay=1&controls=0&modestbranding=1&mute=1"  
+                src="https://www.youtube.com/embed/${firstVideo.url}?autoplay=1&controls=0&modestbranding=1&mute=1&loop=1&playlist=${firstVideo.url}"  
                 title="YouTube video player" 
                 frameborder="0" 
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                 allowfullscreen>
             </iframe>
+
                 <div  class="overlay" onclick="window.location.href='video.html?id=${firstVideo.id}';">
                     <h2 class="overlay-text">${firstVideo.titre}</h2>
                 </div>
