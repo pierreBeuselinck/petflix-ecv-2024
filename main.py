@@ -76,9 +76,9 @@ class Adoptant(Base):
 
 class Adoption(Base):
     __tablename__ = "adoption"
-    id = Column(Integer, primary_key=True, index=True)
-    animal_id = Column(Integer, ForeignKey("animal.id_animal"))
-    date_adoption = Column(Date)
+    id_adoptant = Column(Integer, primary_key=True, index=True)
+    id_animal = Column(Integer, ForeignKey("animal.id_animal"))
+    date_adoption = Column(Date, index=True)
     animal = relationship("Animal", back_populates="adoptions")
 
 class Controle(Base):
@@ -89,15 +89,9 @@ class Controle(Base):
 
 
 class AdoptionData(BaseModel):
-    date_adoption: str
     id_animal: int
     id_adoptant: int
-
-class Adoption(BaseModel):
-    id_adoption: int
     date_adoption: str
-    id_animal: int
-    id_adoptant: int
 
 # Route pour récupérer la liste des adoptants enregistrés
 @app.get("/get-adoptants")
