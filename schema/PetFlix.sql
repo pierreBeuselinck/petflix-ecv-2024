@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Hôte : localhost
--- Généré le : lun. 08 avr. 2024 à 21:03
--- Version du serveur : 10.4.27-MariaDB
--- Version de PHP : 8.0.25
+-- Hôte : 127.0.0.1
+-- Généré le : ven. 12 avr. 2024 à 16:17
+-- Version du serveur : 10.4.32-MariaDB
+-- Version de PHP : 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de données : `PetFlix`
+-- Base de données : `petflix`
 --
 
 -- --------------------------------------------------------
@@ -89,8 +89,10 @@ CREATE TABLE `animal` (
 INSERT INTO `animal` (`id_animal`, `type`, `nom`, `age`, `date_arrive`, `date_adoption`, `id_video`, `id_membres`) VALUES
 (1, 'Chat', 'Minou', 2, '2023-12-24 00:00:00', '2024-03-01 11:38:09', 1, 1),
 (2, 'Chien', 'Max', 5, '2023-06-01 00:00:00', '2023-10-17 11:39:17', 2, 2),
-(4, 'Chat', 'Felix', 3, '2024-03-24 16:41:42', NULL, 1, 2),
-(5, 'Chien', 'Snoopy', 3, '2023-12-31 00:00:00', NULL, NULL, NULL);
+(4, 'Chat', 'Felix', 3, '2024-03-24 16:41:42', NULL, 26, 2),
+(5, 'Chien', 'Snoopy', 3, '2023-12-31 00:00:00', NULL, 24, 2),
+(6, 'Chien', 'River', NULL, '2024-04-12 15:03:22', NULL, 24, 8),
+(8, 'Chat', 'Minouche', 9, '2024-04-12 15:05:08', NULL, 4, 8);
 
 -- --------------------------------------------------------
 
@@ -114,10 +116,10 @@ INSERT INTO `controle` (`id_controle`, `date_controle`, `id_adoption`) VALUES
 -- --------------------------------------------------------
 
 --
--- Structure de la table `membresAsso`
+-- Structure de la table `membresasso`
 --
 
-CREATE TABLE `membresAsso` (
+CREATE TABLE `membresasso` (
   `id_membres` int(11) NOT NULL,
   `nom` varchar(50) NOT NULL,
   `prenom` varchar(50) NOT NULL,
@@ -127,10 +129,10 @@ CREATE TABLE `membresAsso` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Déchargement des données de la table `membresAsso`
+-- Déchargement des données de la table `membresasso`
 --
 
-INSERT INTO `membresAsso` (`id_membres`, `nom`, `prenom`, `ville`, `email`, `telephone`) VALUES
+INSERT INTO `membresasso` (`id_membres`, `nom`, `prenom`, `ville`, `email`, `telephone`) VALUES
 (1, 'Dupont', 'Jean', 'Paris', 'dupont@example.com', '0123456789'),
 (2, 'Durand', 'Marie', 'Lyon', 'durand@example.com', '0987654321'),
 (8, 'Doe', 'John', 'New York', 'john@example.com', '1234567890');
@@ -159,7 +161,8 @@ INSERT INTO `video` (`id_video`, `titre`, `description`, `url`, `date_ajout`) VA
 (3, 'Border collie et son chat roux', 'Border collie et son chat roux', 'P_2Q2v7hkvc', '2023-11-16'),
 (4, 'Chaton joueur', 'Un chaton joueur qui adore les câlins.', 'aABqY7Mcenk', '2024-03-24'),
 (24, 'River and Colin babies', 'River and Colin babies', 'BXR_uGxLy_s', '2024-04-07'),
-(25, 'Famille de cygnes', 'Famille de cygnes avec 10 cygnons', '_Hgt56rY008', '2024-04-08');
+(25, 'Famille de cygnes', 'Famille de cygnes avec 10 cygnons', '_Hgt56rY008', '2024-04-08'),
+(26, 'Chat bengal qui miaule ', 'Chat bengal qui miaule', 'EG9ReWgZeWE', '2024-04-12');
 
 --
 -- Index pour les tables déchargées
@@ -196,9 +199,9 @@ ALTER TABLE `controle`
   ADD KEY `id_adoption` (`id_adoption`);
 
 --
--- Index pour la table `membresAsso`
+-- Index pour la table `membresasso`
 --
-ALTER TABLE `membresAsso`
+ALTER TABLE `membresasso`
   ADD PRIMARY KEY (`id_membres`),
   ADD UNIQUE KEY `email` (`email`);
 
@@ -228,7 +231,7 @@ ALTER TABLE `adoption`
 -- AUTO_INCREMENT pour la table `animal`
 --
 ALTER TABLE `animal`
-  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id_animal` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pour la table `controle`
@@ -237,16 +240,16 @@ ALTER TABLE `controle`
   MODIFY `id_controle` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT pour la table `membresAsso`
+-- AUTO_INCREMENT pour la table `membresasso`
 --
-ALTER TABLE `membresAsso`
+ALTER TABLE `membresasso`
   MODIFY `id_membres` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pour la table `video`
 --
 ALTER TABLE `video`
-  MODIFY `id_video` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id_video` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- Contraintes pour les tables déchargées
@@ -264,7 +267,7 @@ ALTER TABLE `adoption`
 --
 ALTER TABLE `animal`
   ADD CONSTRAINT `animal_ibfk_1` FOREIGN KEY (`id_video`) REFERENCES `video` (`id_video`),
-  ADD CONSTRAINT `animal_ibfk_2` FOREIGN KEY (`id_membres`) REFERENCES `membresAsso` (`id_membres`);
+  ADD CONSTRAINT `animal_ibfk_2` FOREIGN KEY (`id_membres`) REFERENCES `membresasso` (`id_membres`);
 
 --
 -- Contraintes pour la table `controle`
