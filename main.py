@@ -4,6 +4,7 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.ext.declarative import declarative_base
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
+from sqlalchemy.orm import aliased
 from datetime import datetime, timedelta
 import logging 
 
@@ -141,32 +142,38 @@ async def list_animaux(request: Request):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la récupération des animaux : {str(e)}")
 
-# Route pour récupérer les vidéos d'adoption
 @app.get("/videos/")
 async def list_videos(request: Request, animal_type: str = None, member_city: str = None):
     db = SessionLocal()
-    query = db.query(Video)
+    
+    # Créer des alias pour les tables Animal et Video
+    AnimalAlias = aliased(Animal)
+    VideoAlias = aliased(Video)
+    
+    # Créer la requête SQL pour récupérer les vidéos filtrées
+    query = db.query(VideoAlias).join(AnimalAlias, VideoAlias.id_video == AnimalAlias.id_video)
     
     # Filtrer par type d'animal
     if animal_type:
-        query = query.join(Animal).filter(Animal.type == animal_type)
-    
+        query = query.filter(AnimalAlias.type == animal_type)
+
     # Filtrer par ville du membre asso
     if member_city:
-        query = query.join(Animal, Membre).filter(Membre.ville == member_city)
-    
+        query = query.join(Membre, AnimalAlias.id_membres == Membre.id_membres).filter(Membre.ville == member_city)
+
+    # Récupérer les vidéos après application des filtres
     videos = query.all()
-    
+
     video_details = [
         {
-            "id": video.id_video, 
-            "titre": video.titre, 
-            "description": video.description, 
-            "url": video.url, 
+            "id": video.id_video,
+            "titre": video.titre,
+            "description": video.description,
+            "url": video.url,
             "date_ajout": video.date_ajout.strftime("%Y-%m-%d")
         } for video in videos
     ]
-    
+
     return {"videos": video_details}
 
 
@@ -291,3 +298,4 @@ async def create_adoption(request: Request, adoption_data: AdoptionData):
 
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Erreur lors de la création de l'adoption : {str(e)}")
+
