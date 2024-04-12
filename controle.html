@@ -26,8 +26,8 @@
                 <thead class="bg-gray-800">
                     <tr>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date du contrôle</th>
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom et Prénom de l'adoptant</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Date d'adoption</th>
+                        <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom et Prénom de l'adoptant</th>
                         <th scope="col" class="px-6 py-3 text-left text-xs font-bold text-gray-300 uppercase tracking-wider">Nom de l'animal</th>
                     </tr>
                 </thead>
@@ -59,15 +59,15 @@
                     const row = controlesTable.insertRow();
                     const dateControleCell = row.insertCell(0);
                     dateControleCell.classList.add('px-6', 'py-3');
-                    const nomAdoptantCell = row.insertCell(1);
-                    nomAdoptantCell.classList.add('px-6', 'py-3');
-                    const dateAdoptionCell = row.insertCell(2);
+                    const dateAdoptionCell = row.insertCell(1);
                     dateAdoptionCell.classList.add('px-6', 'py-3');
+                    const nomAdoptantCell = row.insertCell(2);
+                    nomAdoptantCell.classList.add('px-6', 'py-3');
                     const nomAnimalCell = row.insertCell(3);
                     nomAnimalCell.classList.add('px-6', 'py-3');
                     dateControleCell.textContent = new Date(controle.date_controle).toLocaleDateString("fr-FR");
-                    nomAdoptantCell.textContent = `${controle.nom_adoptant} ${controle.prenom_adoptant}`;
                     dateAdoptionCell.textContent = new Date(controle.date_adoption).toLocaleDateString("fr-FR");
+                    nomAdoptantCell.textContent = `${controle.nom_adoptant} ${controle.prenom_adoptant}`;
                     nomAnimalCell.textContent = controle.nom_animal;
                 });
             })
