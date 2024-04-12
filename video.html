@@ -68,7 +68,7 @@
             const iframeContainer = document.getElementById("iframe-container");
             const iframeHtml = `
                 <iframe width="680" height="400" 
-                    src="https://www.youtube.com/embed/${data.video.url}"  title="YouTube video player" frameborder="0" 
+                    src="https://www.youtube.com/embed/${data.video.url}?autoplay=1&modestbranding=1&mute=1&loop=1&playlist=${data.video.url}"  title="YouTube video player" frameborder="0" 
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
                     reibollo="strict-origin-when-cross-origin" allowfullscreen>
                 </iframe>`;
